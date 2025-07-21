@@ -51,15 +51,14 @@
 
 <div id="changelog">
   <h2>Changelog & Dev Updates</h2>
-  <ul>
-    <li><strong>2025-07-20:</strong> Added automatic server status refresh every 1 minute.</li>
-    <li><strong>2025-07-15:</strong> Upgraded Minecraft server to version 1.20.2.</li>
-    <li><strong>2025-07-10:</strong> Fixed a bug with player count display.</li>
+  <ul id="changelog-list">
+    <li>Loading changelog...</li>
   </ul>
 </div>
 
 <script>
   const serverIP = "30.ip.gl.ply.gg:21711";
+  const changelogCSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSLOA0s69tgK5aV1S00nj7AJMft6yo2qEaZFHzpV9TeL9e2EA7Ipjtgkr43Dg0KriXQoZlEAvbhG-pm/pub?gid=0&single=true&output=csv";
   const apiURL = `https://api.mcstatus.io/v2/status/java/30.ip.gl.ply.gg:21711`;
 
   async function fetchServerStatus() {
@@ -90,6 +89,53 @@
       console.error("Fetch error: ", error);
     }
   }
+
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+  async function fetchChangelog() {
+    try {
+      const response = await fetch(changelogCSV_URL);
+      if (!response.ok) {
+        throw new Error("Network response for changelog was not ok");
+      }
+      const csvText = await response.text();
+
+      PapaParse.parse(csvText, {
+        header: true,
+        dynamicTyping: true,
+        complete: function(results) {
+          const changelogEntries = results.data.filter(row => row.Date && row.Update); 
+          const changelogList = document.getElementById("changelog-list");
+          changelogList.innerHTML = '';
+
+          if (changelogEntries.length === 0) {
+            changelogList.innerHTML = '<li>No changelog entries found.</li>';
+            return;
+          }
+
+          changelogEntries.sort((a, b) => new Date(b.Date) - new Date(a.Date));
+
+          changelogEntries.forEach(entry => {
+            const li = document.createElement("li");
+            let updateText = `<strong>${entry.Date || "N/A"}:</strong> ${entry.Update || "No update message"}`;
+            if (entry.Category) { 
+                updateText += ` <span style="font-size:0.8em; color:#666;">[${entry.Category}]</span>`;
+            }
+            li.innerHTML = updateText;
+            changelogList.appendChild(li);
+          });
+        }
+      });
+
+    } catch (error) {
+      document.getElementById("changelog-list").innerHTML = '<li>Error loading changelog.</li>';
+      console.error("Fetch changelog error: ", error);
+    }
+  }
+
+  fetchServerStatus();
+  fetchChangelog(); // Load changelog once
+
 
   fetchServerStatus();
   setInterval(fetchServerStatus, 60000);
