@@ -1,156 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>HAKAI Server Status</title>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            hakai: '#FFDD33'
+          },
+          fontFamily: {
+            sans: ['Outfit', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
   <style>
     body {
-      background-color: #0d0d0d;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      color: #f4f4f4;
-      max-width: 800px;
-      margin: 50px auto;
-      padding: 30px;
-      border: 2px solid #333;
-      border-radius: 12px;
-      background-image: url('https://i.imgur.com/k5BXmrj.jpeg');
-      background-size: cover;
-      background-position: center;
-      box-shadow: 0 0 20px #FFD70088;
+      background-color: #0f0f0f;
+      font-family: 'Outfit', sans-serif;
     }
 
-    h2 {
-      color: #FFD700;
-      text-shadow: 0 0 5px #000;
+    .bento {
+      background: #1a1a1a;
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      box-shadow: 0 0 20px rgba(255, 221, 51, 0.08);
+      transition: transform 0.2s ease;
     }
 
-    #status, #changelog {
-      background: rgba(0, 0, 0, 0.7);
-      padding: 20px;
-      border-radius: 10px;
-      margin-bottom: 30px;
-      box-shadow: inset 0 0 10px #222;
-    }
-
-    #server-name {
-      font-size: 1.6em;
-      font-weight: bold;
-      color: #FFD700;
-    }
-
-    #player-count, #motd, #server-version {
-      margin: 5px 0;
-    }
-
-    #changelog-list li {
-      margin-bottom: 10px;
-      line-height: 1.4;
-    }
-
-    .category {
-      font-size: 0.8em;
-      color: #ffcc00;
-      background: #222;
-      padding: 2px 6px;
-      border-radius: 4px;
-      margin-left: 10px;
-    }
-
-    .error {
-      color: #ff4c4c;
-      font-weight: bold;
+    .bento:hover {
+      transform: translateY(-2px);
     }
   </style>
 </head>
-<body>
 
-  <div id="status">
-    <div id="server-name">Loading server status...</div>
-    <div id="server-version"></div>
-    <div id="player-count"></div>
-    <div id="motd"></div>
-  </div>
+<body class="text-white px-4 py-8">
+  <main class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- Title -->
+    <div class="md:col-span-3 bento flex flex-col md:flex-row items-start md:items-center justify-between gap-2">
+      <h1 class="text-5xl font-extrabold text-hakai tracking-tight leading-tight">HAKAI WORLD</h1>
+      <span id="server-status" class="text-lg md:text-xl text-white/80">Checking...</span>
+    </div>
 
-  <div id="changelog">
-    <h2>Changelog & Dev Updates</h2>
-    <ul id="changelog-list">
-      <li>Loading changelog...</li>
-    </ul>
-  </div>
+    <!-- Server Info -->
+    <div class="bento col-span-1 space-y-3">
+      <h2 class="text-2xl font-bold text-hakai">Server Info</h2>
+      <p><span class="font-semibold">IP:</span> <span id="server-ip">30.ip.gl.ply.gg:21711</span></p>
+      <p><span class="font-semibold">Version:</span> 1.21</p>
+      <p><span class="font-semibold">Players:</span> <span id="player-count">?</span></p>
+    </div>
+
+  <!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HAKAI Server Status</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            hakai: '#FFDD33'
+          },
+          fontFamily: {
+            sans: ['Outfit', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #0f0f0f;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .bento {
+      background: #1a1a1a;
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      box-shadow: 0 0 20px rgba(255, 221, 51, 0.08);
+      transition: transform 0.2s ease;
+    }
+
+    .bento:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+
+<body class="text-white px-4 py-8">
+  <main class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="md:col-span-3 bento flex flex-col md:flex-row items-start md:items-center justify-between gap-2">
+      <h1 class="text-5xl font-extrabold text-hakai tracking-tight leading-tight">HAKAI WORLD</h1>
+      <span id="server-status" class="text-lg md:text-xl text-white/80">Checking...</span>
+    </div>
+
+    <div class="bento col-span-1 space-y-3">
+      <h2 class="text-2xl font-bold text-hakai">Server Info</h2>
+      <p><span class="font-semibold">IP:</span> <span id="server-ip">30.ip.gl.ply.gg:21711</span></p>
+      <p><span class="font-semibold">Version:</span> 1.21</p>
+      <p><span class="font-semibold">Players:</span> <span id="player-count">?</span></p>
+    </div>
+
+    <div class="bento col-span-2">
+      <h2 class="text-2xl font-bold text-hakai mb-3">Changelog</h2>
+      <ul id="changelog-list" class="space-y-3 text-sm text-white/90">
+      </ul>
+    </div>
+
+    <div class="bento col-span-1">
+      <img src="https://via.placeholder.com/600x200?text=News" alt="News" class="rounded-lg w-full mb-3 object-cover" />
+      <h3 class="text-xl font-bold text-hakai">Server News</h3>
+      <p class="text-sm text-gray-400">Stay updated with what’s happening in the HAKAI world.</p>
+    </div>
+
+    <div class="bento col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <img src="https://i.postimg.cc/HkFjKKYX/2025-07-21-17-59-11.png" class="rounded-lg w-full object-cover mb-2" />
+        <h4 class="text-lg font-semibold text-hakai">Epic Spawn Area</h4>
+        <p class="text-sm text-gray-400">A fresh new design for the central hub.</p>
+      </div>
+      <div>
+        <img src="https://i.postimg.cc/pTHrVFnd/2025-07-21-17-59-46.png" class="rounded-lg w-full object-cover mb-2" />
+        <h4 class="text-lg font-semibold text-hakai">Player Castle</h4>
+        <p class="text-sm text-gray-400">Built by the community in survival mode!</p>
+      </div>
+    </div>
+  </main>
 
   <script>
-    const serverIP = "30.ip.gl.ply.gg:21711";
-    const changelogCSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSLOA0s69tgK5aV1S00nj7AJMft6yo2qEaZFHzpV9TeL9e2EA7Ipjtgkr43Dg0KriXQoZlEAvbhG-pm/pub?gid=0&single=true&output=csv";
-    const apiURL = `https://api.mcstatus.io/v2/status/java/${serverIP}`;
+    const statusSpan = document.getElementById('server-status');
+    const playerCount = document.getElementById('player-count');
 
-    async function fetchServerStatus() {
+    async function fetchStatus() {
       try {
-        const response = await fetch(apiURL);
-        if (!response.ok) throw new Error("Server status fetch failed.");
-        const data = await response.json();
-
-        if (data.online) {
-          document.getElementById("server-name").textContent = `🟢 Server Online: ${serverIP}`;
-          document.getElementById("server-version").textContent = `Version: ${data.server.game_version || "?"}`;
-          document.getElementById("player-count").textContent = `Players: ${data.players.now} / ${data.players.max}`;
-          document.getElementById("motd").textContent = `MOTD: ${data.motd.clean}`;
+        const res = await fetch('https://api.mcstatus.io/v2/status/java/30.ip.gl.ply.gg:21711');
+        if (!res.ok) throw new Error('Network response was not ok');
+        const data = await res.json();
+        if (data && data.online) {
+          statusSpan.textContent = '🟢 Online';
+          playerCount.textContent = `${data.players.online}/${data.players.max}`;
         } else {
-          throw new Error("Server is offline.");
+          statusSpan.textContent = '🔴 Offline';
+          playerCount.textContent = '0';
         }
-      } catch (error) {
-        document.getElementById("server-name").textContent = "🔴 Server is offline or error fetching status.";
-        document.getElementById("server-version").textContent = "";
-        document.getElementById("player-count").textContent = "";
-        document.getElementById("motd").textContent = "";
-        console.error(error);
+      } catch (err) {
+        statusSpan.textContent = '⚠️ Error';
+        playerCount.textContent = '?';
+        console.error(err);
       }
     }
+    fetchStatus();
+  </script>
 
-    async function fetchChangelog() {
+  <script>
+    async function loadChangelog() {
       try {
-        const response = await fetch(changelogCSV_URL);
-        if (!response.ok) throw new Error("Changelog fetch failed.");
-        const csvText = await response.text();
+        const response = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSLOA0s69tgK5aV1S00nj7AJMft6yo2qEaZFHzpV9TeL9e2EA7Ipjtgkr43Dg0KriXQoZlEAvbhG-pm/pub?gid=0&single=true&output=csv");
+        if (!response.ok) throw new Error('Failed to load changelog');
+        const text = await response.text();
+        const lines = text.trim().split('\n').slice(1);
+        const list = document.getElementById("changelog-list");
 
-        Papa.parse(csvText, {
-          header: true,
-          dynamicTyping: true,
-          complete: function(results) {
-            const entries = results.data.filter(row => row.Date && row.Update);
-            const changelogList = document.getElementById("changelog-list");
-            changelogList.innerHTML = '';
-
-            if (entries.length === 0) {
-              changelogList.innerHTML = '<li>No changelog entries found.</li>';
-              return;
-            }
-
-            entries.sort((a, b) => new Date(b.Date) - new Date(a.Date));
-
-            entries.forEach(entry => {
-              const li = document.createElement("li");
-              let html = `<strong>${entry.Date}:</strong> ${entry.Update}`;
-              if (entry.Category) {
-                html += ` <span class="category">${entry.Category}</span>`;
-              }
-              li.innerHTML = html;
-              changelogList.appendChild(li);
-            });
+        for (const row of lines) {
+          const [date, desc, cat] = row.split(',');
+          if (desc && cat) {
+            const li = document.createElement("li");
+            li.innerHTML = `
+              <div class="flex items-start gap-2">
+                <span class="text-hakai font-bold uppercase">${cat}</span>
+                <div class="flex-1">
+                  <p>${desc}</p>
+                  <span class="text-xs text-gray-500">${date}</span>
+                </div>
+              </div>
+            `;
+            list.appendChild(li);
           }
-        });
-
-      } catch (error) {
-        document.getElementById("changelog-list").innerHTML = '<li class="error">Failed to load changelog.</li>';
-        console.error(error);
+        }
+      } catch (err) {
+        console.error('Changelog load error:', err);
       }
     }
-
-    fetchServerStatus();
-    fetchChangelog();
-    setInterval(fetchServerStatus, 60000);
+    loadChangelog();
   </script>
 </body>
+
 </html>
