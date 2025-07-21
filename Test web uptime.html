@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Minecraft Server Status</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 600px;
+    margin: 30px auto;
+    background: #f4f4f9;
+    color: #222;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px #ccc;
+  }
+  #status {
+    margin-bottom: 20px;
+  }
+  #server-name {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+  }
+  #player-count {
+    font-weight: bold;
+  }
+  #changelog {
+    background: white;
+    border-radius: 6px;
+    padding: 15px;
+    box-shadow: inset 0 0 8px #ddd;
+  }
+  h2 {
+    margin-top: 0;
+  }
+</style>
+</head>
+<body>
+
+<div id="status">
+  <div id="server-name">Loading server status...</div>
+  <div id="server-version"></div>
+  <div id="player-count"></div>
+  <div id="motd"></div>
+</div>
+
+<div id="changelog">
+  <h2>Changelog & Dev Updates</h2>
+  <ul>
+    <li><strong>2025-07-20:</strong> Added automatic server status refresh every 1 minute.</li>
+    <li><strong>2025-07-15:</strong> Upgraded Minecraft server to version 1.20.2.</li>
+    <li><strong>2025-07-10:</strong> Fixed a bug with player count display.</li>
+  </ul>
+</div>
+
+<script>
+  const serverIP = "https://api.mcstatus.io/v2/status/java/30.ip.gl.ply.gg:21711"; // REPLACE with your Minecraft server IP or domain
+  const apiURL = `https://mcapi.us/server/status?ip=${serverIP}`;
+
+  async function fetchServerStatus() {
+    try {
+      const response = await fetch(apiURL);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+
+      if (data.online) {
+        document.getElementById("server-name").textContent = `Server: ${data.server.name || serverIP}`;
+        document.getElementById("server-version").textContent = `Version: ${data.server.game_version || "Unknown"}`;
+        document.getElementById("player-count").textContent = `Players online: ${data.players.now} / ${data.players.max}`;
+        // Clean MOTD by removing Minecraft formatting codes (§)
+        const motdClean = data.motd.clean;
+        document.getElementById("motd").textContent = `MOTD: ${motdClean}`;
+      } else {
+        document.getElementById("server-name").textContent = "Server is offline.";
+        document.getElementById("server-version").textContent = "";
+        document.getElementById("player-count").textContent = "";
+        document.getElementById("motd").textContent = "";
+      }
+    } catch (error) {
+      document.getElementById("server-name").textContent = "Error fetching server status.";
+      document.getElementById("server-version").textContent = "";
+      document.getElementById("player-count").textContent = "";
+      document.getElementById("motd").textContent = "";
+      console.error("Fetch error: ", error);
+    }
+  }
+
+  fetchServerStatus();
+  // Refresh status every 60 seconds
+  setInterval(fetchServerStatus, 60000);
+</script>
+
+</body>
+</html>
