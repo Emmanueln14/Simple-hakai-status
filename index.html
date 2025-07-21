@@ -1,44 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>HAKAI Server Status</title>
-<style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    max-width: 600px;
-    margin: 30px auto;
-    background: #121212;
-    color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 15px #ccc;
-  }
-  #status {
-    margin-bottom: 20px;
-  }
-  #server-name {
-    font-size: 1.5em;
-    margin-bottom: 10px;
-  }
-  #player-count {
-    font-weight: bold;
-  }
-  #motd-display {
-    font-style: italic;
-  }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HAKAI Server Status</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 600px;
+      margin: 30px auto;
+      background: #121212;
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px #ccc;
+    }
+    #status {
+      margin-bottom: 20px;
+    }
+    #server-name {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+    }
+    #player-count {
+      font-weight: bold;
+    }
+    #motd-display {
+      font-style: italic;
+    }
 
-  #changelog {
-    background: #2a2525;
-    border-radius: 6px;
-    padding: 15px;
-    box-shadow: inset 0 0 8px #ddd;
-  }
-  h2 {
-    margin-top: 0;
-  }
-</style>
+    #changelog {
+      background: #2a2525;
+      border-radius: 6px;
+      padding: 15px;
+      box-shadow: inset 0 0 8px #ddd;
+    }
+    h2 {
+      margin-top: 0;
+    }
+  </style>
 </head>
 <body>
 
@@ -56,25 +56,24 @@
   </ul>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
 <script>
   const serverIP = "30.ip.gl.ply.gg:21711";
   const changelogCSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSLOA0s69tgK5aV1S00nj7AJMft6yo2qEaZFHzpV9TeL9e2EA7Ipjtgkr43Dg0KriXQoZlEAvbhG-pm/pub?gid=0&single=true&output=csv";
-  const apiURL = `https://api.mcstatus.io/v2/status/java/30.ip.gl.ply.gg:21711`;
+  const apiURL = `https://api.mcstatus.io/v2/status/java/${serverIP}`;
 
   async function fetchServerStatus() {
     try {
       const response = await fetch(apiURL);
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
+      if (!response.ok) throw new Error("Network response was not ok");
       const data = await response.json();
 
       if (data.online) {
         document.getElementById("server-name").textContent = `Server: ${data.server.name || serverIP}`;
         document.getElementById("server-version").textContent = `Version: ${data.server.game_version || "Unknown"}`;
         document.getElementById("player-count").textContent = `Players online: ${data.players.now} / ${data.players.max}`;
-        const motdClean = data.motd.clean;
-        document.getElementById("motd").textContent = `MOTD: ${motdClean}`;
+        document.getElementById("motd").textContent = `MOTD: ${data.motd.clean}`;
       } else {
         document.getElementById("server-name").textContent = "Server is offline.";
         document.getElementById("server-version").textContent = "";
@@ -90,21 +89,17 @@
     }
   }
 
- <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
-<script
   async function fetchChangelog() {
     try {
       const response = await fetch(changelogCSV_URL);
-      if (!response.ok) {
-        throw new Error("Network response for changelog was not ok");
-      }
+      if (!response.ok) throw new Error("Network response for changelog was not ok");
       const csvText = await response.text();
 
-      PapaParse.parse(csvText, {
+      Papa.parse(csvText, {
         header: true,
         dynamicTyping: true,
         complete: function(results) {
-          const changelogEntries = results.data.filter(row => row.Date && row.Update); 
+          const changelogEntries = results.data.filter(row => row.Date && row.Update);
           const changelogList = document.getElementById("changelog-list");
           changelogList.innerHTML = '';
 
@@ -118,15 +113,14 @@
           changelogEntries.forEach(entry => {
             const li = document.createElement("li");
             let updateText = `<strong>${entry.Date || "N/A"}:</strong> ${entry.Update || "No update message"}`;
-            if (entry.Category) { 
-                updateText += ` <span style="font-size:0.8em; color:#666;">[${entry.Category}]</span>`;
+            if (entry.Category) {
+              updateText += ` <span style="font-size:0.8em; color:#999;">[${entry.Category}]</span>`;
             }
             li.innerHTML = updateText;
             changelogList.appendChild(li);
           });
         }
       });
-
     } catch (error) {
       document.getElementById("changelog-list").innerHTML = '<li>Error loading changelog.</li>';
       console.error("Fetch changelog error: ", error);
@@ -134,12 +128,10 @@
   }
 
   fetchServerStatus();
-  fetchChangelog(); // Load changelog once
-
-
-  fetchServerStatus();
+  fetchChangelog();
   setInterval(fetchServerStatus, 60000);
 </script>
 
 </body>
 </html>
+
