@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -28,13 +28,53 @@
       font-family: 'Outfit', sans-serif;
     }
 
-    .bento {
-      background: #1a1a1a;
-      border-radius: 1.25rem;
-      padding: 1.5rem;
-      box-shadow: 0 0 20px rgba(255, 221, 51, 0.08);
-      transition: transform 0.2s ease;
-    }
+     .bento {
+    background: #1a1a1a;
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+    box-shadow: 0 0 20px rgba(255, 221, 51, 0.08);
+    transition: transform 0.2s ease;
+    max-height: 500px;
+    overflow: hidden;
+  }
+
+   .scrollable-bento {
+    overflow-y: auto;
+    max-height: 800px;
+  }
+
+  .info-bento {
+    background: #1a1a1a;
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+    box-shadow: 0 0 20px rgba(255, 221, 51, 0.08);
+    transition: transform 0.2s ease;
+    max-height: 200px;
+    overflow: hidden;
+  }
+
+  .news-bento {
+    background: #1a1a1a;
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+    position: absolute;
+    top: 380px;
+    box-shadow: 0 0 20px rgba(255, 221, 51, 0.08);
+    transition: transform 0.2s ease;
+    max-height: 800px;
+    overflow: hidden;
+  }
+
+     .desc-bento {
+    background: #1a1a1a;
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+    box-shadow: 0 0 20px rgba(255, 221, 51, 0.08);
+    transition: transform 0.2s ease;
+    max-height: 500px;
+    overflow: hidden;
+  }
+
 
     .bento:hover {
       transform: translateY(-2px);
@@ -49,26 +89,25 @@
       <span id="server-status" class="text-lg md:text-xl text-white/80">Checking...</span>
     </div>
 
-    <div class="bento col-span-1 space-y-3">
-      <h2 class="text-2xl font-bold text-hakai">Server Info</h2>
-      <p><span class="font-semibold">IP:</span> <span id="server-ip">30.ip.gl.ply.gg:21711</span></p>
-      <p><span class="font-semibold">Version:</span> 1.21</p>
-      <p><span class="font-semibold">Players:</span> <span id="player-count">?</span></p>
+    <div class="bento info-bento col-span-1 space-y-3">
+  <h2 class="text-2xl font-bold text-hakai">Server Info</h2>
+  <p><span class="font-semibold">IP:</span> <span id="server-ip">30.ip.gl.ply.gg:21711</span></p>
+  <p><span class="font-semibold">Version:</span> 1.21</p>
+  <p><span class="font-semibold">Players:</span> <span id="player-count">?</span></p>
+</div>
+
+   <div class="bento scrollable-bento col-span-2">
+  <h2 class="text-2xl font-bold text-hakai mb-3">Changelog</h2>
+  <ul id="changelog-list" class="space-y-3 text-sm text-white/90 pr-2">
+  </ul>
     </div>
 
-    <div class="bento col-span-2">
-      <h2 class="text-2xl font-bold text-hakai mb-3">Changelog</h2>
-      <ul id="changelog-list" class="space-y-3 text-sm text-white/90">
-      </ul>
-    </div>
-
-    <div class="bento col-span-1">
-      <img src="https://via.placeholder.com/600x200?text=News" alt="News" class="rounded-lg w-full mb-3 object-cover" />
+    <div class="bento news-bento col-span-1">
       <h3 class="text-xl font-bold text-hakai">Server News</h3>
       <p class="text-sm text-gray-400">Mantente al tanto de lo que pasa en HAKAI world.</p>
     </div>
 
-    <div class="bento col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div class="bento desc-bento col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
       <div>
         <img src="https://i.postimg.cc/HkFjKKYX/2025-07-21-17-59-11.png" class="rounded-lg w-full object-cover mb-2" />
         <h4 class="text-lg font-semibold text-hakai">Área de spawn épica</h4>
@@ -93,7 +132,7 @@
         const data = await res.json();
         if (data && data.online) {
           statusSpan.textContent = '🟢 Online';
-          playerCount.textContent = `${data.players.online}/${data.players.max}`;
+          playerCount.textContent = ${data.players.online}/${data.players.max};
         } else {
           statusSpan.textContent = '🔴 Offline';
           playerCount.textContent = '0';
@@ -127,19 +166,19 @@ async function loadChangelog() {
         let updateHtml = row.Update
           .replace(/^"|"$/g, '') 
           .split('\n')
-          .map(line => line.trim() ? `<li>${line}</li>` : '')
+          .map(line => line.trim() ? <li>${line}</li> : '')
           .join('');
 
-        updateHtml = `<ul class="ml-4 list-disc">${updateHtml}</ul>`;
+        updateHtml = <ul class="ml-4 list-disc">${updateHtml}</ul>;
 
         const li = document.createElement("li");
-        li.innerHTML = `
+        li.innerHTML = 
           <div class="flex flex-col gap-1">
             <span class="text-hakai font-bold uppercase">${row.Category}</span>
             <div>${updateHtml}</div>
             <span class="text-xs text-gray-500">${row.Date}</span>
           </div>
-        `;
+        ;
         list.appendChild(li);
       }
     });
