@@ -7,6 +7,7 @@
   <title>HAKAI Server Status</title>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet" />
   <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -107,36 +108,47 @@
   </script>
 
   <script>
-   async function loadChangelog() {
-      try {
-        const response = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSLOA0s69tgK5aV1S00nj7AJMft6yo2qEaZFHzpV9TeL9e2EA7Ipjtgkr43Dg0KriXQoZlEAvbhG-pm/pub?gid=0&single=true&output=csv");
-        if (!response.ok) throw new Error('Failed to load changelog');
-        const text = await response.text();
-        const lines = text.trim().split('\n').slice(1);
-        const list = document.getElementById("changelog-list");
+async function loadChangelog() {
+  try {
+    const response = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vSLOA0s69tgK5aV1S00nj7AJMft6yo2qEaZFHzpV9TeL9e2EA7Ipjtgkr43Dg0KriXQoZlEAvbhG-pm/pub?gid=0&single=true&output=csv");
+    if (!response.ok) throw new Error('Failed to load changelog');
+    const csvText = await response.text();
 
-        for (const row of lines) {
-          const [date, desc, cat] = row.split(',');
-          if (desc && cat) {
-            const li = document.createElement("li");
-            li.innerHTML = `
-              <div class="flex items-start gap-2">
-                <span class="text-hakai font-bold uppercase">${cat}</span>
-                <div class="flex-1">
-                  <p>${desc}</p>
-                  <span class="text-xs text-gray-500">${date}</span>
-                </div>
-              </div>
-            `;
-            list.appendChild(li);
-          }
-        }
-      } catch (err) {
-        console.error('Changelog load error:', err);
+    const parsed = Papa.parse(csvText, {
+      header: true,
+      skipEmptyLines: true,
+    });
+
+    const list = document.getElementById("changelog-list");
+    list.innerHTML = "";
+
+    parsed.data.forEach(row => {
+      if (row.Update && row.Category) {
+        let updateHtml = row.Update
+          .replace(/^"|"$/g, '') 
+          .split('\n')
+          .map(line => line.trim() ? `<li>${line}</li>` : '')
+          .join('');
+
+        updateHtml = `<ul class="ml-4 list-disc">${updateHtml}</ul>`;
+
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <div class="flex flex-col gap-1">
+            <span class="text-hakai font-bold uppercase">${row.Category}</span>
+            <div>${updateHtml}</div>
+            <span class="text-xs text-gray-500">${row.Date}</span>
+          </div>
+        `;
+        list.appendChild(li);
       }
-    }
-    loadChangelog();
-  </script>
+    });
+  } catch (err) {
+    console.error('Changelog load error:', err);
+  }
+}
+loadChangelog();
+</script>
 </body>
 
 </html>
