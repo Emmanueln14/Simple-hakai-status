@@ -34,8 +34,11 @@
       padding: 1.5rem;
       box-shadow: 0 0 20px rgba(255, 221, 51, 0.08);
       transition: transform 0.2s ease;
-      max-height: 500px;
       overflow: hidden;
+    }
+
+    .bento:hover {
+      transform: translateY(-2px);
     }
 
     .scrollable-bento {
@@ -44,40 +47,16 @@
     }
 
     .info-bento {
-      background: #1a1a1a;
-      border-radius: 1.25rem;
-      padding: 1.5rem;
-      box-shadow: 0 0 20px rgba(255, 221, 51, 0.08);
-      transition: transform 0.2s ease;
       max-height: 200px;
-      overflow: hidden;
     }
 
+    /* Remove absolute/position styles from news-bento and desc-bento for new layout */
     .news-bento {
-      background: #1a1a1a;
-      border-radius: 1.25rem;
-      padding: 1.5rem;
-      position: absolute;
-      top: 380px;
-      line-height: 31.7rem;
-      box-shadow: 0 0 20px rgba(255, 221, 51, 0.08);
-      transition: transform 0.2s ease;
-      max-height: 800px;
-      overflow: hidden;
+      /* max-height will be set by Tailwind classes */
     }
 
     .desc-bento {
-      background: #1a1a1a;
-      border-radius: 1.25rem;
-      padding: 1.5rem;
-      box-shadow: 0 0 20px rgba(255, 221, 51, 0.08);
-      transition: transform 0.2s ease;
-      max-height: 500px;
-      overflow: hidden;
-    }
-
-    .bento:hover {
-      transform: translateY(-2px);
+      /* max-height will be set by Tailwind classes */
     }
   </style>
 </head>
@@ -96,23 +75,28 @@
       <p><span class="font-semibold">Players:</span> <span id="player-count">?</span></p>
     </div>
 
-    <div class="bento scrollable-bento col-span-2">
-      <h2 class="text-2xl font-bold text-hakai mb-3">Changelog</h2>
-      <ul id="changelog-list" class="space-y-3 text-sm text-white/90 pr-2"></ul>
+    <!-- Make Changelog and Server News side-by-side and same height -->
+    <div class="col-span-1 md:col-span-2 flex flex-col gap-6">
+      <div class="bento scrollable-bento flex-1">
+        <h2 class="text-2xl font-bold text-hakai mb-3">Changelog</h2>
+        <ul id="changelog-list" class="space-y-3 text-sm text-white/90 pr-2"></ul>
+      </div>
+    </div>
+    <div class="col-span-1 flex flex-col gap-6">
+      <div class="bento news-bento flex-1 min-h-[400px] md:min-h-[800px] flex flex-col">
+        <h3 class="text-xl font-bold text-hakai">Server News</h3>
+        <p class="text-sm text-gray-400">Mantente al tanto de lo que pasa en HAKAI world.</p>
+      </div>
     </div>
 
-    <div class="bento news-bento col-span-1">
-      <h3 class="text-xl font-bold text-hakai">Server News</h3>
-      <p class="text-sm text-gray-400">Mantente al tanto de lo que pasa en HAKAI world.</p>
-    </div>
-
-    <div class="bento desc-bento col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div>
+    <!-- Images bento right of changelog/news, full width on mobile, right column on md+ -->
+    <div class="bento desc-bento col-span-1 md:col-span-3 flex flex-col md:flex-row gap-4 mt-0">
+      <div class="flex-1">
         <img src="https://i.postimg.cc/HkFjKKYX/2025-07-21-17-59-11.png" class="rounded-lg w-full object-cover mb-2" />
         <h4 class="text-lg font-semibold text-hakai">Área de spawn épica</h4>
         <p class="text-sm text-gray-400">Ubicado en un hermoso bioma.</p>
       </div>
-      <div>
+      <div class="flex-1">
         <img src="https://i.postimg.cc/pTHrVFnd/2025-07-21-17-59-46.png" class="rounded-lg w-full object-cover mb-2" />
         <h4 class="text-lg font-semibold text-hakai">Gran Comunidad</h4>
         <p class="text-sm text-gray-400">Una comunidad muy entusiasta!</p>
@@ -131,7 +115,7 @@
         const data = await res.json();
         if (data && data.online) {
           statusSpan.textContent = '🟢 Online';
-          playerCount.textContent = `${data.players.online}/${data.players.max}`;
+          playerCount.textContent = ${data.players.online}/${data.players.max};
         } else {
           statusSpan.textContent = '🔴 Offline';
           playerCount.textContent = '0';
@@ -166,16 +150,16 @@
               .map(line => line.trim())
               .filter(line => line.length > 0);
 
-            const updatesHTML = `<ul class="ml-4 list-disc">${updateLines.map(line => `<li>${line}</li>`).join('')}</ul>`;
+            const updatesHTML = <ul class="ml-4 list-disc">${updateLines.map(line => <li>${line}</li>).join('')}</ul>;
 
             const li = document.createElement("li");
-            li.innerHTML = `
+            li.innerHTML = 
               <div class="flex flex-col gap-1">
                 <span class="text-hakai font-bold uppercase">${row.Category}</span>
                 <div>${updatesHTML}</div>
                 <span class="text-xs text-gray-500">${row.Date}</span>
               </div>
-            `;
+            ;
             list.appendChild(li);
           }
         });
