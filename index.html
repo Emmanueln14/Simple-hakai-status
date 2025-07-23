@@ -50,7 +50,6 @@
       max-height: 200px;
     }
 
-    /* Remove absolute/position styles from news-bento and desc-bento for new layout */
     .news-bento {
       /* max-height will be set by Tailwind classes */
     }
@@ -115,7 +114,7 @@
         const data = await res.json();
         if (data && data.online) {
           statusSpan.textContent = '🟢 Online';
-          playerCount.textContent = ${data.players.online}/${data.players.max};
+          playerCount.textContent = `${data.players.online}/${data.players.max}`;
         } else {
           statusSpan.textContent = '🔴 Offline';
           playerCount.textContent = '0';
@@ -123,7 +122,7 @@
       } catch (err) {
         statusSpan.textContent = '⚠️ Error';
         playerCount.textContent = '?';
-        console.error(err);
+        console.error('Status fetch error:', err);
       }
     }
     fetchStatus();
@@ -150,21 +149,23 @@
               .map(line => line.trim())
               .filter(line => line.length > 0);
 
-            const updatesHTML = <ul class="ml-4 list-disc">${updateLines.map(line => <li>${line}</li>).join('')}</ul>;
+            const updatesHTML = `<ul class="ml-4 list-disc">${updateLines.map(line => `<li>${line}</li>`).join('')}</ul>`;
 
             const li = document.createElement("li");
-            li.innerHTML = 
+            li.innerHTML = `
               <div class="flex flex-col gap-1">
                 <span class="text-hakai font-bold uppercase">${row.Category}</span>
                 <div>${updatesHTML}</div>
                 <span class="text-xs text-gray-500">${row.Date}</span>
               </div>
-            ;
+            `;
             list.appendChild(li);
           }
         });
       } catch (err) {
         console.error('Changelog load error:', err);
+        const list = document.getElementById("changelog-list");
+        list.innerHTML = '<li class="text-red-400">Error loading changelog. Please try again later.</li>';
       }
     }
     loadChangelog();
