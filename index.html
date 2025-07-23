@@ -49,81 +49,80 @@
     .info-bento {
       max-height: 200px;
     }
-
-    /* Remove absolute/position styles from news-bento and desc-bento for new layout */
-    .news-bento {
-      /* max-height will be set by Tailwind classes */
-    }
-
-    .desc-bento {
-      /* max-height will be set by Tailwind classes */
-    }
   </style>
 </head>
 
 <body class="text-white px-4 py-8">
-  <main class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-    <div class="md:col-span-3 bento flex flex-col md:flex-row items-start md:items-center justify-between gap-2">
-      <h1 class="text-5xl font-extrabold text-hakai tracking-tight leading-tight">HAKAI WORLD</h1>
-      <span id="server-status" class="text-lg md:text-xl text-white/80">Checking...</span>
-    </div>
+ <main class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4" style="gap:0">
+  <div class="md:col-span-4 bento flex flex-col md:flex-row items-start md:items-center justify-between">
+    <h1 class="text-5xl font-extrabold text-hakai tracking-tight leading-tight">HAKAI WORLD</h1>
+    <span id="server-status" class="text-lg md:text-xl text-white/80">Checking...</span>
+  </div>
 
-    <div class="bento info-bento col-span-1 space-y-3">
-      <h2 class="text-2xl font-bold text-hakai">Server Info</h2>
-      <p><span class="font-semibold">IP:</span> <span id="server-ip">30.ip.gl.ply.gg:21711</span></p>
-      <p><span class="font-semibold">Version:</span> 1.21</p>
-      <p><span class="font-semibold">Players:</span> <span id="player-count">?</span></p>
-    </div>
+  <div class="bento info-bento col-span-1 flex flex-col" style="height: 600px;">
+    <h2 class="text-2xl font-bold text-hakai">Server Info</h2>
+    <p><span class="font-semibold">IP:</span> <span id="server-ip">30.ip.gl.ply.gg:21711</span></p>
+    <p><span class="font-semibold">Version:</span> 1.21</p>
+    <p><span class="font-semibold">Players:</span> <span id="player-count">?</span></p>
+  </div>
+  <div class="bento scrollable-bento col-span-2 flex flex-col" style="height: 600px;">
+    <h2 class="text-2xl font-bold text-hakai mb-3">Changelog</h2>
+    <ul id="changelog-list" class="space-y-3 text-sm text-white/90 pr-2"></ul>
+  </div>
+  <div class="bento news-bento col-span-1 flex flex-col" style="height: 600px;">
+    <h3 class="text-xl font-bold text-hakai">Server News</h3>
+    <p class="text-sm text-gray-400">Mantente al tanto de lo que pasa en HAKAI world.</p>
+  </div>
 
-    <!-- Make Changelog and Server News side-by-side and same height -->
-    <div class="col-span-1 md:col-span-2 flex flex-col gap-6">
-      <div class="bento scrollable-bento flex-1">
-        <h2 class="text-2xl font-bold text-hakai mb-3">Changelog</h2>
-        <ul id="changelog-list" class="space-y-3 text-sm text-white/90 pr-2"></ul>
-      </div>
+  <div class="bento desc-bento col-span-1 md:col-span-4 flex flex-col md:flex-row" style="gap:0">
+    <div class="flex-1 flex flex-col">
+      <img src="https://i.postimg.cc/HkFjKKYX/2025-07-21-17-59-11.png" class="rounded-lg w-full object-cover" />
+      <h4 class="text-lg font-semibold text-hakai">Área de spawn épica</h4>
+      <p class="text-sm text-gray-400">Ubicado en un hermoso bioma.</p>
     </div>
-    <div class="col-span-1 flex flex-col gap-6">
-      <div class="bento news-bento flex-1 min-h-[400px] md:min-h-[800px] flex flex-col">
-        <h3 class="text-xl font-bold text-hakai">Server News</h3>
-        <p class="text-sm text-gray-400">Mantente al tanto de lo que pasa en HAKAI world.</p>
-      </div>
+    <div class="flex-1 flex flex-col">
+      <img src="https://i.postimg.cc/pTHrVFnd/2025-07-21-17-59-46.png" class="rounded-lg w-full object-cover" />
+      <h4 class="text-lg font-semibold text-hakai">Gran Comunidad</h4>
+      <p class="text-sm text-gray-400">Una comunidad muy entusiasta!</p>
     </div>
-
-    <!-- Images bento right of changelog/news, full width on mobile, right column on md+ -->
-    <div class="bento desc-bento col-span-1 md:col-span-3 flex flex-col md:flex-row gap-4 mt-0">
-      <div class="flex-1">
-        <img src="https://i.postimg.cc/HkFjKKYX/2025-07-21-17-59-11.png" class="rounded-lg w-full object-cover mb-2" />
-        <h4 class="text-lg font-semibold text-hakai">Área de spawn épica</h4>
-        <p class="text-sm text-gray-400">Ubicado en un hermoso bioma.</p>
-      </div>
-      <div class="flex-1">
-        <img src="https://i.postimg.cc/pTHrVFnd/2025-07-21-17-59-46.png" class="rounded-lg w-full object-cover mb-2" />
-        <h4 class="text-lg font-semibold text-hakai">Gran Comunidad</h4>
-        <p class="text-sm text-gray-400">Una comunidad muy entusiasta!</p>
-      </div>
-    </div>
-  </main>
-
+  </div>
+</main>
   <script>
     const statusSpan = document.getElementById('server-status');
     const playerCount = document.getElementById('player-count');
 
     async function fetchStatus() {
       try {
+        // Try the direct API first
         const res = await fetch('https://api.mcstatus.io/v2/status/java/30.ip.gl.ply.gg:21711');
         if (!res.ok) throw new Error('Network response was not ok');
         const data = await res.json();
         if (data && data.online) {
           statusSpan.textContent = '🟢 Online';
-          playerCount.textContent = ${data.players.online}/${data.players.max};
+          playerCount.textContent = `${data.players.online}/${data.players.max}`;
         } else {
           statusSpan.textContent = '🔴 Offline';
           playerCount.textContent = '0';
         }
       } catch (err) {
-        statusSpan.textContent = '⚠️ Error';
-        playerCount.textContent = '?';
-        console.error(err);
+        console.error('Server status fetch error:', err);
+        // Try alternative API if the first one fails due to CORS
+        try {
+          const altRes = await fetch('https://api.mcsrvstat.us/2/30.ip.gl.ply.gg:21711');
+          const altData = await altRes.json();
+          if (altData && altData.online) {
+            statusSpan.textContent = '🟢 Online';
+            playerCount.textContent = `${altData.players.online}/${altData.players.max}`;
+          } else {
+            statusSpan.textContent = '🔴 Offline';
+            playerCount.textContent = '0';
+          }
+        } catch (altErr) {
+          statusSpan.textContent = '⚠️ CORS Error - Check console';
+          playerCount.textContent = '?';
+          console.error('Alternative API also failed:', altErr);
+          console.log('Both APIs failed - likely due to CORS restrictions. Consider using a backend proxy.');
+        }
       }
     }
     fetchStatus();
@@ -146,20 +145,18 @@
 
         parsed.data.forEach(row => {
           if (row.Update && row.Category) {
-            const updateLines = row.Update.replace(/^\"|\"$/g, '').split('\n')
-              .map(line => line.trim())
-              .filter(line => line.length > 0);
+            const updateLines = row.Update.replace(/^\"|\"$/g, '').split('\n').map(line => line.trim()).filter(line => line.length > 0);
 
-            const updatesHTML = <ul class="ml-4 list-disc">${updateLines.map(line => <li>${line}</li>).join('')}</ul>;
+            const updatesHTML = `<ul class="ml-4 list-disc">${updateLines.map(line => `<li>${line}</li>`).join('')}</ul>`;
 
             const li = document.createElement("li");
-            li.innerHTML = 
+            li.innerHTML = `
               <div class="flex flex-col gap-1">
                 <span class="text-hakai font-bold uppercase">${row.Category}</span>
                 <div>${updatesHTML}</div>
                 <span class="text-xs text-gray-500">${row.Date}</span>
               </div>
-            ;
+            `;
             list.appendChild(li);
           }
         });
