@@ -51,45 +51,44 @@
     }
 
     .news-bento {
-      /* max-height will be set by Tailwind classes */
     }
 
     .desc-bento {
-      /* max-height will be set by Tailwind classes */
     }
   </style>
 </head>
 
 <body class="text-white px-4 py-8">
-  <main class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-    <div class="md:col-span-3 bento flex flex-col md:flex-row items-start md:items-center justify-between gap-2">
+  <main class="max-w-6xl mx-auto space-y-6">
+    <!-- Header -->
+    <div class="bento flex flex-col md:flex-row items-start md:items-center justify-between gap-2">
       <h1 class="text-5xl font-extrabold text-hakai tracking-tight leading-tight">HAKAI WORLD</h1>
       <span id="server-status" class="text-lg md:text-xl text-white/80">Checking...</span>
     </div>
 
-    <div class="bento info-bento col-span-1 space-y-3">
-      <h2 class="text-2xl font-bold text-hakai">Server Info</h2>
-      <p><span class="font-semibold">IP:</span> <span id="server-ip">30.ip.gl.ply.gg:21711</span></p>
-      <p><span class="font-semibold">Version:</span> 1.21</p>
-      <p><span class="font-semibold">Players:</span> <span id="player-count">?</span></p>
-    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="bento info-bento space-y-3">
+        <h2 class="text-2xl font-bold text-hakai">Server Info</h2>
+        <p><span class="font-semibold">IP:</span> <span id="server-ip">30.ip.gl.ply.gg:21711</span></p>
+        <p><span class="font-semibold">Version:</span> 1.21</p>
+        <p><span class="font-semibold">Players:</span> <span id="player-count">?</span></p>
+      </div>
 
-    <!-- Make Changelog and Server News side-by-side and same height -->
-    <div class="col-span-1 md:col-span-2 flex flex-col gap-6">
-      <div class="bento scrollable-bento flex-1">
+    
+      <div class="bento scrollable-bento">
         <h2 class="text-2xl font-bold text-hakai mb-3">Changelog</h2>
         <ul id="changelog-list" class="space-y-3 text-sm text-white/90 pr-2"></ul>
       </div>
-    </div>
-    <div class="col-span-1 flex flex-col gap-6">
-      <div class="bento news-bento flex-1 min-h-[400px] md:min-h-[800px] flex flex-col">
+
+      
+      <div class="bento news-bento flex flex-col">
         <h3 class="text-xl font-bold text-hakai">Server News</h3>
         <p class="text-sm text-gray-400">Mantente al tanto de lo que pasa en HAKAI world.</p>
       </div>
     </div>
 
-    <!-- Images bento right of changelog/news, full width on mobile, right column on md+ -->
-    <div class="bento desc-bento col-span-1 md:col-span-3 flex flex-col md:flex-row gap-4 mt-0">
+    
+    <div class="bento desc-bento flex flex-col md:flex-row gap-4">
       <div class="flex-1">
         <img src="https://i.postimg.cc/HkFjKKYX/2025-07-21-17-59-11.png" class="rounded-lg w-full object-cover mb-2" />
         <h4 class="text-lg font-semibold text-hakai">Área de spawn épica</h4>
